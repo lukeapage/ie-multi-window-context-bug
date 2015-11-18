@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <script type="text/javascript">
+	var state = "Loading...",
+		infoMessage = "";
+	setTimeout(function() {
+		var myApp = window.opener.myApp;
+		var asyncCallMadeInState;
+		myApp.asyncCall(function asyncCallbackOnPopup() {
+			asyncCallMadeInState = state;
+		});
+		function makeSyncCallToMainWindow() {
+			state = "waiting...";
+			waitFor(1);
+			state = "making sync call";
+			myApp.syncCall();
+			state = "finished";
+		}
+		makeSyncCallToMainWindow();
+
+		// Print the sequence from the main window once everything has finished.
+		setTimeout(function() {
+			window.opener.testDone(asyncCallMadeInState === "making sync call");
+		}, 10);
+	}, 100);
+
+	function waitFor(secs) {
+		var timeAtStart = Number(new Date()),
+			ms = secs * 1000;
+		while(Number(new Date()) - timeAtStart < ms) {
+			document.getElementById('info').innerHTML = document.getElementById('info').innerHTML;
+		}
+	}
+  </script>
+ </head>
+ <body>
+   <pre id="info">
+	Performing test...
+   </pre>
+ </body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <script type="text/javascript">
+	window.myApp = {
+		syncCall: function() {
+			return "Sync";
+		},
+		asyncCall: function(callback) {
+			var that = this;
+			setTimeout(function timeoutOnMainPage() {
+				callback("async");
+			}, 0);
+		},
+		sequence: []
+	};
+	window.runTest = function() {
+		window.testDone = function (isBuggy) {
+			popup.close();
+			if (isBuggy) {
+				document.getElementById('info').innerHTML = "Buggy";
+			} else {
+				document.getElementById('info').innerHTML = "Not Buggy";
+			}
+		};
+		var popup = window.open('testpopup.htm');
+		return false;
+	};
+  </script>
+ </head>
+ <body>
+   Click the link and then you will see the result of the test in the opened popup.
+   <a onclick="runTest();" href="javascript:void();">Open Popup</a>
+   <p id="info"></p>
+ </body>
+</html>
